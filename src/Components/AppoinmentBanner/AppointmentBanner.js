@@ -10,7 +10,7 @@ const AppointmentBanner = () => {
       style={{
         background: `url(${AppoinmentBg})`,
         marginTop: "180px",
-        backgroundColor: "rgba(45 , 58 , 74 , 0.8)",
+        backgroundColor: "rgba(45 , 58 , 74 , 0.9)",
         backgroundBlendMode: "darken , luminosity",
       }}
       sx={{ flexGrow: 1 }}
