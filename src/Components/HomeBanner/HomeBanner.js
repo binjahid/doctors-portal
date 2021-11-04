@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import chair from "../../images/chair.png";
 import bg from "../../images/bg.png";
 import { Typography, Container, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 const HomeBanner = () => {
   const verticalCenter = {
     display: "flex",
@@ -34,6 +35,7 @@ const HomeBanner = () => {
               illum, perferendis dolor! Nisi dolore sapiente sint repellat,
               culpa consequatur aliquam quia.
             </Typography>
+
             <Button variant="contained">GET APPOINTMENT</Button>
           </Box>
         </Grid>
