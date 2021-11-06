@@ -30,13 +30,13 @@ const AvailableAppoinments = ({ date }) => {
     },
     {
       id: 5,
-      name: "Teeth Orthodontics",
+      name: "Oral Surgery",
       time: "8:00 AM - 9:00 AM",
       space: 10,
     },
     {
       id: 6,
-      name: "Teeth Orthodontics",
+      name: "pedaitric Medicine",
       time: "8:00 AM - 9:00 AM",
       space: 5,
     },
@@ -56,7 +56,11 @@ const AvailableAppoinments = ({ date }) => {
       </Typography>
       <Grid container spacing={2}>
         {appoinmentsServices.map((bookings) => (
-          <BookingOptions key={bookings.id} booking={bookings}></BookingOptions>
+          <BookingOptions
+            key={bookings.id}
+            booking={bookings}
+            date={date}
+          ></BookingOptions>
         ))}
       </Grid>
     </Container>
