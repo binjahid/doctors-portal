@@ -1,8 +1,10 @@
 import { Button, TextField } from "@mui/material";
 import React from "react";
+import useFirebase from "../../hooks/useFiresbase";
 
 const MakeAdmin = () => {
   const [email, setEmail] = React.useState("");
+  const { token } = useFirebase();
   const handleAdminSubmit = (e) => {
     e.preventDefault();
     console.log("Admin");
@@ -11,6 +13,7 @@ const MakeAdmin = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         email: Useremail,

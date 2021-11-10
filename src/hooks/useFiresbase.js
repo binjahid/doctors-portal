@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  getIdToken,
 } from "firebase/auth";
 initializeFirebase();
 const useFirebase = () => {
@@ -16,6 +17,7 @@ const useFirebase = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [token, setToken] = useState("");
   const auth = getAuth();
   const googleProvider = new GoogleAuthProvider();
   const loginWithGoogle = (location, history) => {
@@ -74,6 +76,9 @@ const useFirebase = () => {
       if (user) {
         setUser(user);
         setLoading(false);
+        getIdToken(user).then((token) => {
+          setToken(token);
+        });
       } else {
         setUser({});
       }
@@ -118,6 +123,7 @@ const useFirebase = () => {
     error,
     loginWithGoogle,
     isAdmin,
+    token,
   };
 };
 
