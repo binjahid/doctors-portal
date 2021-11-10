@@ -10,20 +10,20 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { useHistory } from "react-router";
 initializeFirebase();
 const useFirebase = () => {
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const auth = getAuth();
-  const history = useHistory();
   const googleProvider = new GoogleAuthProvider();
   const loginWithGoogle = (location, history) => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         const { user } = result;
         setUser(user);
+        saveUserToDb(user.email, user.displayName, "PUT");
         const direction = location?.state?.from || "/";
         history.replace(direction);
         setError("");
@@ -35,13 +35,14 @@ const useFirebase = () => {
         setLoading(false);
       });
   };
-  const registerUser = (email, password, name) => {
+  const registerUser = (email, password, name, history) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
         setUser(res.user);
         setError("");
         updateProfile(auth.currentUser, { displayName: name });
+        saveUserToDb(email, name, "POST");
         history.replace("/");
       })
       .catch((err) => {
@@ -80,6 +81,13 @@ const useFirebase = () => {
     });
     return () => unsubcribe;
   }, []);
+  useEffect(() => {
+    fetch(`http://localhost:5000/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setIsAdmin(data.isAdmin);
+      });
+  }, [user.email]);
   const logoutUser = () => {
     signOut(auth)
       .then(() => {
@@ -90,6 +98,16 @@ const useFirebase = () => {
         setError(err.message);
       });
   };
+  const saveUserToDb = (email, name, method) => {
+    const user = { email, name };
+    fetch("http://localhost:5000/users", {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+  };
 
   return {
     user,
@@ -99,6 +117,7 @@ const useFirebase = () => {
     loginUser,
     error,
     loginWithGoogle,
+    isAdmin,
   };
 };
 

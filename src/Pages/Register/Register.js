@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import login from "../../images/login.png";
 
@@ -30,12 +30,13 @@ const Register = () => {
   const handlePasswordConfirm = (e) => {
     setLoginPasswordConfirm(e.target.value);
   };
+  const history = useHistory();
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     if (loginPassword !== loginPasswordConfirm) {
       return alert("Password does not match");
     }
-    registerUser(loginEmial, loginPassword, userName);
+    registerUser(loginEmial, loginPassword, userName, history);
   };
   return (
     <div>

@@ -15,21 +15,62 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
+import { Button } from "@mui/material";
+import DashboardHome from "./DashboardHome";
+import AddPatient from "./AddPatient";
+import MakeAdmin from "./MakeAdmin";
+import useAuth from "../../hooks/useAuth";
+import AdminRoute from "../../PrivateRoute/AdminRoute";
 
 const drawerWidth = 240;
 
 function ResponsiveDashBoard(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  let { path, url } = useRouteMatch();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  const { isAdmin } = useAuth();
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
+      <List>
+        <ListItem>
+          <Link to="/appoinment">
+            <Button color="inherit">Appoinments</Button>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link to={`${url}`}>
+            <Button color="inherit">Dashboard</Button>
+          </Link>
+        </ListItem>
+        {isAdmin && (
+          <div>
+            <ListItem>
+              <Link to={`${url}/make-admin`}>
+                <Button color="inherit">Make Admin</Button>
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link to={`${url}/add-patient`}>
+                <Button color="inherit">Add Patient</Button>
+              </Link>
+            </ListItem>
+          </div>
+        )}
+      </List>
+
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem button key={text}>
@@ -118,7 +159,17 @@ function ResponsiveDashBoard(props) {
         }}
       >
         <Toolbar />
-        <Typography paragraph>content</Typography>
+        <Switch>
+          <Route exact path={`${path}`}>
+            <DashboardHome></DashboardHome>
+          </Route>
+          <AdminRoute path={`${path}/make-admin`}>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+          <AdminRoute path={`${path}/add-patient`}>
+            <AddPatient></AddPatient>
+          </AdminRoute>
+        </Switch>
       </Box>
     </Box>
   );
